@@ -5,8 +5,80 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lab2._4_5"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Text Reactor" Height="450" Width="820"
+        Icon="Sources\icon-reactor.png"
+        Background= "#303C74"
+        >
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="NewDocument" />
+        <CommandBinding Command="Save" Executed="SaveDocument"/>
+        <CommandBinding Command="Open" Executed="OpenDocument"/>
+    </Window.CommandBindings>
+    
+    <Grid x:Name="layoutGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+
+        <Menu Margin="10,10,10,0" VerticalAlignment="Top"  Background="#7A84AE" >
+            <MenuItem Header="File" x:Name="File" >
+                
+                <MenuItem Header="New" x:Name="New" Command="New"/>
+                <MenuItem Header="Open" x:Name="Open" Command="Open"/>
+                <MenuItem Header="Save" x:Name="Save" Command="Save" />
+                <MenuItem Header="Save As..." x:Name="SaveAs" Command="SaveAs"/>
+                
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Copy" x:Name="Copy" Command="Copy"/>
+                <MenuItem Header="Paste" x:Name="Paste" Command="Paste"/>
+                <MenuItem Header="Cut" x:Name="Cut" Command="Cut"/>
+            </MenuItem>
+        </Menu>
         
+        <ToolBar  Height="40" Margin="10,0,10,0" VerticalAlignment="Top" Grid.Row="1">
+            <Button Margin="0,0,2,0" Command="New">
+                <Image Source="Sources\icon-new.png"></Image>
+            </Button>
+            <Button Margin="0,0,2,0" Command="Open">
+                <Image Source="Sources\icon-open.png"></Image>
+            </Button>
+            <Button Margin="0,0,2,0" Command="Save">
+                <Image Source="Sources\icon-save.png"></Image>
+            </Button>
+            
+            <ToggleButton x:Name="boldToggleBUtton" Content="B"  FontWeight="Bold" FontSize="25" Command="ToggleBold"></ToggleButton>
+            <ToggleButton x:Name="italicToggleBUtton" Content="I"  FontStyle="Italic" FontSize="25" Command="ToggleItalic"></ToggleButton>
+            <ToggleButton x:Name="underlineToggleBUtton" Command="ToggleUnderline"><TextBlock TextDecorations="Underline" FontSize="25">U</TextBlock>
+            </ToggleButton>
+
+            <ComboBox x:Name="fontFamilyComboBox" Width="100" SelectionChanged="FontFamilyComboBox_SelectionChanged"></ComboBox>
+            <ComboBox x:Name="fontSizeComboBox" Width="50" SelectionChanged="FontSizeComboBox_SelectionChanged"></ComboBox>
+
+        </ToolBar>
+
+        <TabControl Margin="10,0,10,10"  Grid.Row="2" x:Name="tabControl">
+            <TabItem Header="New Document">                
+                <TabItem.Content>
+                    <RichTextBox  Margin="0,0,0,10" >
+                        <FlowDocument>
+                            <Paragraph>
+                                <InlineUIContainer>
+                                </InlineUIContainer>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </TabItem.Content>
+            </TabItem>          
+        </TabControl>
+
+       
+
+
+
     </Grid>
 </Window>
