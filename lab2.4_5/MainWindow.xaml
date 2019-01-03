@@ -22,8 +22,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
-
         <Menu Margin="10,10,10,0" VerticalAlignment="Top"  Background="#7A84AE" >
             <MenuItem Header="File" x:Name="File" >
                 
@@ -56,24 +54,13 @@
             <ToggleButton x:Name="underlineToggleBUtton" Command="ToggleUnderline"><TextBlock TextDecorations="Underline" FontSize="25">U</TextBlock>
             </ToggleButton>
 
-            <ComboBox x:Name="fontFamilyComboBox" Width="100" SelectionChanged="FontFamilyComboBox_SelectionChanged"></ComboBox>
-            <ComboBox x:Name="fontSizeComboBox" Width="50" SelectionChanged="FontSizeComboBox_SelectionChanged"></ComboBox>
+            <ComboBox x:Name="fontFamilyComboBox" Width="100" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" SelectionChanged="FontFamilyComboBox_SelectionChanged"></ComboBox>
+            <ComboBox x:Name="fontSizeComboBox" Width="50"  SelectionChanged="FontSizeComboBox_SelectionChanged"></ComboBox>
 
         </ToolBar>
 
-        <TabControl Margin="10,0,10,10"  Grid.Row="2" x:Name="tabControl">
-            <TabItem Header="New Document">                
-                <TabItem.Content>
-                    <RichTextBox  Margin="0,0,0,10" >
-                        <FlowDocument>
-                            <Paragraph>
-                                <InlineUIContainer>
-                                </InlineUIContainer>
-                            </Paragraph>
-                        </FlowDocument>
-                    </RichTextBox>
-                </TabItem.Content>
-            </TabItem>          
+        <TabControl Margin="10,0,10,10"  Grid.Row="2" x:Name="tabControl" >
+                              
         </TabControl>
 
        

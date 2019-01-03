@@ -25,42 +25,41 @@ namespace lab2._4_5
         public MainWindow()
         {
             InitializeComponent();
-
-            //this.FontFamily = new FontFamily("Times New Roman");
-            this.FontSize = 14;
-            fontFamilyComboBox.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
             fontSizeComboBox.ItemsSource = new List<double>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 36, 48, 72 };
+            NewDocument();
+            
         }
 
         private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ((RichTextBox)(((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Content)).Selection.ApplyPropertyValue(Inline.FontFamilyProperty, fontFamilyComboBox.SelectedItem);
+            ((DocumentTabItem)tabControl.SelectedItem).SelectFontStyle(fontFamilyComboBox.SelectedItem);
         }
 
         private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ((RichTextBox)(((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Content)).Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeComboBox.SelectedItem);
+            ((DocumentTabItem)tabControl.SelectedItem).SelectFontSize(fontSizeComboBox.SelectedItem);
         }
 
         private void NewDocument(object sender, RoutedEventArgs e)
-        {
+        {            
+            DocumentTabItem item = new DocumentTabItem("New Document " + (tabControl.Items.Count).ToString());
+            item.HeaderText = "New Document " + (tabControl.Items.Count+1).ToString();
+            tabControl.Items.Add(item);
+            tabControl.SelectedItem = item;
 
-            Paragraph paragraph = new Paragraph();
-            // Create a FlowDocument with the paragraph and list.
-            FlowDocument flowDocument = new FlowDocument();
-
-
-            RichTextBox richTextBox = new RichTextBox(flowDocument);
-            richTextBox.FontSize = 14;
-            TabItem tabItem = new TabItem();
-            tabItem.Content = richTextBox;
-
-
-            tabControl.Items.Add(tabItem);
-            tabItem.Header = "New Document " + (tabControl.Items.Count).ToString();
-            
         }
 
+        private void NewDocument()
+        {
+
+            DocumentTabItem item = new DocumentTabItem("New Document " + (tabControl.Items.Count).ToString());
+            item.HeaderText = "New Document " + (tabControl.Items.Count + 1).ToString();
+            tabControl.Items.Add(item);
+            tabControl.SelectedItem = item;
+
+        }
+
+       
         private void SaveDocument(object sender, RoutedEventArgs e)
         {
             RichTextBox docBox = (((RichTextBox)((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Content));
