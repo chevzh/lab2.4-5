@@ -22,17 +22,26 @@ namespace lab2._4_5
     /// </summary>
     public partial class MainWindow : Window
     {
+       
+        public Dictionary<string, FontFamily> tabItemFontFamilies = new Dictionary<string, FontFamily>();
+        public string newItem;
+
         public MainWindow()
         {
             InitializeComponent();
             fontSizeComboBox.ItemsSource = new List<double>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 36, 48, 72 };
-            NewDocument();
-            
+           
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            NewDocument(sender, e);
         }
 
         private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ((DocumentTabItem)tabControl.SelectedItem).SelectFontStyle(fontFamilyComboBox.SelectedItem);
+            tabItemFontFamilies[newItem] = (FontFamily)fontFamilyComboBox.SelectedItem;
+            ((DocumentTabItem)tabControl.SelectedItem).SelectFontStyle((FontFamily)fontFamilyComboBox.SelectedItem);          
         }
 
         private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -42,24 +51,14 @@ namespace lab2._4_5
 
         private void NewDocument(object sender, RoutedEventArgs e)
         {            
-            DocumentTabItem item = new DocumentTabItem("New Document " + (tabControl.Items.Count).ToString());
-            item.HeaderText = "New Document " + (tabControl.Items.Count+1).ToString();
+            DocumentTabItem item = new DocumentTabItem("New Document " + (tabControl.Items.Count+1).ToString());
+            tabItemFontFamilies.Add("New Document " + (tabControl.Items.Count+1).ToString(), new FontFamily("Times New Roman"));
             tabControl.Items.Add(item);
             tabControl.SelectedItem = item;
-
+           
         }
+      
 
-        private void NewDocument()
-        {
-
-            DocumentTabItem item = new DocumentTabItem("New Document " + (tabControl.Items.Count).ToString());
-            item.HeaderText = "New Document " + (tabControl.Items.Count + 1).ToString();
-            tabControl.Items.Add(item);
-            tabControl.SelectedItem = item;
-
-        }
-
-       
         private void SaveDocument(object sender, RoutedEventArgs e)
         {
             RichTextBox docBox = (((RichTextBox)((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Content));
@@ -92,7 +91,6 @@ namespace lab2._4_5
             openFile.Filter = "RichText Files (*.rtf)|*.rtf| Text Files (*.txt)|*.txt | XAML Files (*.xaml)|*.xaml|All Files (*.*)|*.*";
             if (openFile.ShowDialog() == true)
             {
-
 
                 if (System.IO.Path.GetExtension(openFile.FileName).ToLower() == ".txt")
                 {
@@ -130,5 +128,6 @@ namespace lab2._4_5
             }
         }
 
+     
     }
 }

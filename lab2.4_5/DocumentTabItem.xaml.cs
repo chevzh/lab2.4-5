@@ -20,22 +20,19 @@ namespace lab2._4_5
     /// </summary>
     public partial class DocumentTabItem : TabItem
     {
+        string headerText;
+        public string HeaderText { get => headerText; set => headerText = value; }
+       
         public DocumentTabItem()
         {
             InitializeComponent();
-        }
-
-        string headerText;
-        
-
-        public string HeaderText { get => headerText; set => headerText = value; }
-       
-
+            
+        }      
 
         public DocumentTabItem(string header)
-        {           
+        {
             InitializeComponent();
-            HeaderText = header;
+            HeaderText = header;        
         }
 
         public void CloseButton_OnClick(object sender, RoutedEventArgs e)
@@ -44,10 +41,10 @@ namespace lab2._4_5
             tabControl.Items.RemoveAt(tabControl.SelectedIndex);
         }
 
-        public void SelectFontStyle(object fontStyle)
+        public void SelectFontStyle(FontFamily fontStyle)
         {
             RtbContent.Focus();
-            RtbContent.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, fontStyle);            
+            RtbContent.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, fontStyle);
         }
 
         public void SelectFontSize(object fontSize)
@@ -60,10 +57,27 @@ namespace lab2._4_5
         {
             var tab = sender as TabItem;
 
+
+
             if (tab != null)
             {
+                TabControl tabControl = (TabControl)Parent;
+
                 RtbContent.Focus();
-                ((MainWindow)System.Windows.Application.Current.MainWindow).fontFamilyComboBox.SelectedItem = RtbContent.FontFamily;
+                FontFamily value;
+
+                if (((MainWindow)System.Windows.Application.Current.MainWindow).tabItemFontFamilies.TryGetValue(HeaderText, out value))
+                {
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).newItem = HeaderText;
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).fontFamilyComboBox.SelectedItem = value;
+                    SelectFontStyle(value);
+
+                }                
+                
+                
+                    
+                
+                
                 ((MainWindow)System.Windows.Application.Current.MainWindow).fontSizeComboBox.SelectedItem = RtbContent.FontSize;
                 
             }
