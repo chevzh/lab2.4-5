@@ -21,11 +21,13 @@ namespace lab2._4_5
     public partial class DocumentTabItem : TabItem
     {
         string headerText;
+        public int wordsCount;
         public string HeaderText { get => headerText; set => headerText = value; }
        
         public DocumentTabItem()
         {
             InitializeComponent();
+            
             
         }      
 
@@ -57,33 +59,43 @@ namespace lab2._4_5
         {
             var tab = sender as TabItem;
 
-
-
             if (tab != null)
             {
                 TabControl tabControl = (TabControl)Parent;
 
                 RtbContent.Focus();
-                FontFamily value;
+                FontFamily fontFamilyValue;
+                double fontSizeValue;
 
-                if (((MainWindow)System.Windows.Application.Current.MainWindow).tabItemFontFamilies.TryGetValue(HeaderText, out value))
+                if (((MainWindow)System.Windows.Application.Current.MainWindow).tabItemFontFamilies.TryGetValue(HeaderText, out fontFamilyValue))
                 {
                     ((MainWindow)System.Windows.Application.Current.MainWindow).newItem = HeaderText;
-                    ((MainWindow)System.Windows.Application.Current.MainWindow).fontFamilyComboBox.SelectedItem = value;
-                    SelectFontStyle(value);
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).fontFamilyComboBox.SelectedItem = fontFamilyValue;
+                    SelectFontStyle(fontFamilyValue);
+                }
 
-                }                
-                
-                
-                    
-                
-                
-                ((MainWindow)System.Windows.Application.Current.MainWindow).fontSizeComboBox.SelectedItem = RtbContent.FontSize;
+
+                if (((MainWindow)System.Windows.Application.Current.MainWindow).tabItemFontSizes.TryGetValue(HeaderText, out fontSizeValue))
+                {
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).newItem = HeaderText;
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).fontSizeComboBox.SelectedItem = fontSizeValue;
+                    SelectFontSize(fontSizeValue);
+                }
                 
             }
             
         }
+               
+        private void RtbContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(WordCounterTextBlock != null)
+            {
+                string text = new TextRange(RtbContent.Document.ContentStart, RtbContent.Document.ContentEnd).Text;
+                wordsCount = text.Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
+                WordCounterTextBlock.Text = "Количество слов " + wordsCount;
+            }
+         
+        }
 
-       
     }
 }

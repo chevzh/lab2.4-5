@@ -24,6 +24,7 @@ namespace lab2._4_5
     {
        
         public Dictionary<string, FontFamily> tabItemFontFamilies = new Dictionary<string, FontFamily>();
+        public Dictionary<string, double> tabItemFontSizes = new Dictionary<string, double>();
         public string newItem;
 
         public MainWindow()
@@ -46,6 +47,7 @@ namespace lab2._4_5
 
         private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            tabItemFontSizes[newItem] = (double)fontSizeComboBox.SelectedItem;
             ((DocumentTabItem)tabControl.SelectedItem).SelectFontSize(fontSizeComboBox.SelectedItem);
         }
 
@@ -53,6 +55,7 @@ namespace lab2._4_5
         {            
             DocumentTabItem item = new DocumentTabItem("New Document " + (tabControl.Items.Count+1).ToString());
             tabItemFontFamilies.Add("New Document " + (tabControl.Items.Count+1).ToString(), new FontFamily("Times New Roman"));
+            tabItemFontSizes.Add("New Document " + (tabControl.Items.Count + 1).ToString(), 14);
             tabControl.Items.Add(item);
             tabControl.SelectedItem = item;
            
@@ -61,34 +64,33 @@ namespace lab2._4_5
 
         private void SaveDocument(object sender, RoutedEventArgs e)
         {
-            RichTextBox docBox = (((RichTextBox)((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Content));
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Text Files (*.txt)|*.txt|RichText Files (*.rtf)|*.rtf|XAML Files (*.xaml)|*.xaml|All files (*.*)|*.*";
-            dialog.FileName = "New Document"; // Default file name
-            dialog.DefaultExt = ".txt"; // Default file extension
+            RichTextBox docBox = (((RichTextBox)((DocumentTabItem)(tabControl.SelectedItem)).RtbContent));
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "Text files(*.txt)|*.txt|Rich Text File(*.rtf)|*.rtf|All files(*.*)|*.*";
+            saveDialog.FileName = ((DocumentTabItem)(tabControl.SelectedItem)).HeaderText;// Default file name
+            saveDialog.DefaultExt = ".txt"; // Default file extension
 
-            Nullable<bool> result = dialog.ShowDialog();
+            Nullable<bool> result = saveDialog.ShowDialog();
             if (result == true)
             {
                 TextRange doc = new TextRange(docBox.Document.ContentStart, docBox.Document.ContentEnd);
-                using (FileStream fs = System.IO.File.Create(dialog.FileName))
+                using (FileStream fs = System.IO.File.Create(saveDialog.FileName))
                 {
-                    if (System.IO.Path.GetExtension(dialog.FileName).ToLower() == ".rtf")
-                        doc.Save(fs, DataFormats.Rtf);
-                    else if (System.IO.Path.GetExtension(dialog.FileName).ToLower() == ".txt")
+                   if (System.IO.Path.GetExtension(saveDialog.FileName).ToLower() == ".txt")
                         doc.Save(fs, DataFormats.Text);
-                    else
-                        doc.Save(fs, DataFormats.Xaml);
+                    else if (System.IO.Path.GetExtension(saveDialog.FileName).ToLower() == ".rtf")
+                        doc.Save(fs, DataFormats.Rtf);
+
                 }
             }
 
            
-        }
+        }      
 
         private void OpenDocument(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
-            openFile.Filter = "RichText Files (*.rtf)|*.rtf| Text Files (*.txt)|*.txt | XAML Files (*.xaml)|*.xaml|All Files (*.*)|*.*";
+            openFile.Filter = "Text files(*.txt)|*.txt|Rich Text File(*.rtf)|*.rtf|All files(*.*)|*.*";
             if (openFile.ShowDialog() == true)
             {
 
@@ -101,33 +103,42 @@ namespace lab2._4_5
                     var paragraph = new Paragraph();
                     paragraph.Inlines.Add(text);
                     document.Blocks.Add(paragraph);
-                    ((RichTextBox)(((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Content)).Document = document;
-                    
+                    ((RichTextBox)(((DocumentTabItem)(tabControl.Items[tabControl.SelectedIndex])).RtbContent)).Document = document;
+
+                    //Костыль на \n
+                    ((DocumentTabItem)tabControl.SelectedItem).WordCounterTextBlock.Text = $"Количество слов: {((DocumentTabItem)tabControl.SelectedItem).wordsCount - 1}";
                 }
                 else
                 {
-                    TextRange documentTextRange = new TextRange(((RichTextBox)((Grid)((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Content).Children[0]).Document.ContentStart, ((RichTextBox)(((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Content)).Document.ContentEnd);
+                    NewDocument(sender, e);
+                    TextRange documentTextRange = new TextRange(((RichTextBox)((DocumentTabItem)(tabControl.SelectedItem)).RtbContent).Document.ContentStart, ((RichTextBox)((DocumentTabItem)(tabControl.SelectedItem)).RtbContent).Document.ContentEnd);
+
                     using (FileStream fs = System.IO.File.Open(openFile.FileName, FileMode.Open))
                     {
-
                         if (System.IO.Path.GetExtension(openFile.FileName).ToLower() == ".rtf")
-                        {
+                        {                            
                             documentTextRange.Load(fs, DataFormats.Rtf);
-                        }
-                        else if (System.IO.Path.GetExtension(openFile.FileName).ToLower() == ".xaml")
-                        {
-                            documentTextRange.Load(fs, DataFormats.Xaml);
-                        }
+                            fontFamilyComboBox.SelectedItem = documentTextRange.GetPropertyValue(FontFamilyProperty);
+                            fontSizeComboBox.SelectedItem = documentTextRange.GetPropertyValue(FontSizeProperty);
 
+                            //Костыль для словарей шрифтов
+                            tabItemFontFamilies.Remove(((DocumentTabItem)tabControl.SelectedItem).HeaderText);
+                            tabItemFontSizes.Remove(((DocumentTabItem)tabControl.SelectedItem).HeaderText);
 
+                        }
                     }
-                }
-               
-                ((TabItem)(tabControl.Items[tabControl.SelectedIndex])).Header = openFile.SafeFileName;
+
+                     ((DocumentTabItem)tabControl.SelectedItem).HeaderText = openFile.SafeFileName;
+
+                    //Продолжение костыля
+                    tabItemFontFamilies.Add(openFile.SafeFileName, (FontFamily)documentTextRange.GetPropertyValue(FontFamilyProperty));
+                    tabItemFontSizes.Add(openFile.SafeFileName, (double)documentTextRange.GetPropertyValue(FontSizeProperty));
+
+                }          
 
             }
         }
+      
 
-     
     }
 }
