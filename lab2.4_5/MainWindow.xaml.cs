@@ -93,10 +93,14 @@ namespace lab2._4_5
             openFile.Filter = "Text files(*.txt)|*.txt|Rich Text File(*.rtf)|*.rtf|All files(*.*)|*.*";
             if (openFile.ShowDialog() == true)
             {
+                NewDocument(sender, e);
+
+                //Костыль для словарей шрифтов
+                tabItemFontFamilies.Remove(((DocumentTabItem)tabControl.SelectedItem).HeaderText);
+                tabItemFontSizes.Remove(((DocumentTabItem)tabControl.SelectedItem).HeaderText);
 
                 if (System.IO.Path.GetExtension(openFile.FileName).ToLower() == ".txt")
-                {
-                    NewDocument(sender, e);
+                {                    
                     var sr = new StreamReader(openFile.FileName, Encoding.Default);
                     string text = sr.ReadToEnd();
                     var document = new FlowDocument();
@@ -105,12 +109,14 @@ namespace lab2._4_5
                     document.Blocks.Add(paragraph);
                     ((RichTextBox)(((DocumentTabItem)(tabControl.Items[tabControl.SelectedIndex])).RtbContent)).Document = document;
 
+                    tabItemFontFamilies.Add(openFile.SafeFileName, new FontFamily("Times New Roman"));
+                    tabItemFontSizes.Add(openFile.SafeFileName, 14);
+
                     //Костыль на \n
                     ((DocumentTabItem)tabControl.SelectedItem).WordCounterTextBlock.Text = $"Количество слов: {((DocumentTabItem)tabControl.SelectedItem).wordsCount - 1}";
                 }
                 else
                 {
-                    NewDocument(sender, e);
                     TextRange documentTextRange = new TextRange(((RichTextBox)((DocumentTabItem)(tabControl.SelectedItem)).RtbContent).Document.ContentStart, ((RichTextBox)((DocumentTabItem)(tabControl.SelectedItem)).RtbContent).Document.ContentEnd);
 
                     using (FileStream fs = System.IO.File.Open(openFile.FileName, FileMode.Open))
@@ -121,20 +127,21 @@ namespace lab2._4_5
                             fontFamilyComboBox.SelectedItem = documentTextRange.GetPropertyValue(FontFamilyProperty);
                             fontSizeComboBox.SelectedItem = documentTextRange.GetPropertyValue(FontSizeProperty);
 
-                            //Костыль для словарей шрифтов
-                            tabItemFontFamilies.Remove(((DocumentTabItem)tabControl.SelectedItem).HeaderText);
-                            tabItemFontSizes.Remove(((DocumentTabItem)tabControl.SelectedItem).HeaderText);
+                          
 
                         }
                     }
 
-                     ((DocumentTabItem)tabControl.SelectedItem).HeaderText = openFile.SafeFileName;
+
+                                    
 
                     //Продолжение костыля
                     tabItemFontFamilies.Add(openFile.SafeFileName, (FontFamily)documentTextRange.GetPropertyValue(FontFamilyProperty));
                     tabItemFontSizes.Add(openFile.SafeFileName, (double)documentTextRange.GetPropertyValue(FontSizeProperty));
 
-                }          
+                }
+
+                 ((DocumentTabItem)tabControl.SelectedItem).HeaderText = openFile.SafeFileName;
 
             }
         }

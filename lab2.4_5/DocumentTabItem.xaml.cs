@@ -26,8 +26,7 @@ namespace lab2._4_5
        
         public DocumentTabItem()
         {
-            InitializeComponent();
-            
+            InitializeComponent();         
             
         }      
 
@@ -40,7 +39,12 @@ namespace lab2._4_5
         public void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {
             TabControl tabControl = (TabControl)Parent;
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).tabItemFontFamilies.Remove(((DocumentTabItem)tabControl.SelectedItem).HeaderText);
+            ((MainWindow)System.Windows.Application.Current.MainWindow).tabItemFontSizes.Remove(((DocumentTabItem)tabControl.SelectedItem).HeaderText);
+          
             tabControl.Items.RemoveAt(tabControl.SelectedIndex);
+            
         }
 
         public void SelectFontStyle(FontFamily fontStyle)
@@ -92,7 +96,7 @@ namespace lab2._4_5
             {
                 string text = new TextRange(RtbContent.Document.ContentStart, RtbContent.Document.ContentEnd).Text;
                 wordsCount = text.Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
-                WordCounterTextBlock.Text = "Количество слов " + wordsCount;
+                WordCounterTextBlock.Text = "Количество слов: " + wordsCount;
             }
          
         }
