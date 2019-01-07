@@ -32,7 +32,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Menu Margin="10,10,10,0" VerticalAlignment="Top"  Background="#7A84AE" >
+        <Menu Margin="10,10,10,0" VerticalAlignment="Top" Style="{DynamicResource MenuStyle}">
             <MenuItem Header="{DynamicResource m_menu_File}" x:Name="File" >                
                 <MenuItem Header="{DynamicResource m_menu_New}" x:Name="New" Command="New"/>
                 <MenuItem Header="{DynamicResource m_menu_Open}" x:Name="Open" Command="Open"/>

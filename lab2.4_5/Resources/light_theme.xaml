@@ -38,4 +38,10 @@
         <Setter Property="BorderBrush" Value="Gray" />
     </Style>
 
+    <Style x:Key="MenuStyle" TargetType="Menu">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Foreground" Value="Gray" />
+        <Setter Property="BorderBrush" Value="Gray" />
+    </Style>
+
 </ResourceDictionary>
