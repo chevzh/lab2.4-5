@@ -7,18 +7,22 @@
         mc:Ignorable="d"
         Title="{DynamicResource m_Title}" Height="450" Width="820"
         Icon="Sources\icon-reactor.png"
-        Background= "#303C74" 
+        Style="{DynamicResource WindowStyle}"
         Loaded="Window_Loaded"
         >
     <Window.CommandBindings>
         <CommandBinding Command="New" Executed="NewDocument" />
         <CommandBinding Command="Save" Executed="SaveDocument"/>
         <CommandBinding Command="Open" Executed="OpenDocument"/>
-        <CommandBinding Command="SaveAs" Executed="SaveAsDocument"/>        
+        <CommandBinding Command="SaveAs" Executed="SaveAsDocument"/>
+        <CommandBinding Command="local:WindowCommands.SelectDarkThemeCommand" Executed="SelectDarkTheme"/>
+        <CommandBinding Command="local:WindowCommands.SelectLightThemeCommand" Executed="SelectLightTheme"/>
     </Window.CommandBindings>
 
     <Window.InputBindings>
         <KeyBinding Command="SaveAs" Gesture="Ctrl +Shift+ S"  />
+        <KeyBinding Command="local:WindowCommands.SelectDarkThemeCommand" Gesture="Ctrl +Shift+ D"/>
+        <KeyBinding Command="local:WindowCommands.SelectLightThemeCommand" Gesture="Ctrl +Shift+ I"/>
     </Window.InputBindings>
 
     <Grid x:Name="layoutGrid">
@@ -46,8 +50,8 @@
 
             <MenuItem Header="{DynamicResource m_menu_View}">
                 <MenuItem Header="{DynamicResource m_menu_Theme}" x:Name="Theme" >
-                    <MenuItem Header="{DynamicResource m_menu_Dark}" x:Name="DarkMenuItem" Click="SelectDarkTheme" IsCheckable="True"/>
-                    <MenuItem Header="{DynamicResource m_menu_Light}" x:Name="LightMenuItem" Click ="SelectLightTheme" IsCheckable="True"/>
+                    <MenuItem Header="{DynamicResource m_menu_Dark}" x:Name="DarkMenuItem" Command="local:WindowCommands.SelectDarkThemeCommand" IsCheckable="True" InputGestureText="Ctrl+Shift+D"/>
+                    <MenuItem Header="{DynamicResource m_menu_Light}" x:Name="LightMenuItem" Command ="local:WindowCommands.SelectLightThemeCommand" IsCheckable="True" InputGestureText="Ctrl+Shift+I"/>
                 </MenuItem>
 
                 <MenuItem Header="{DynamicResource m_menu_Language}"  x:Name="menuLanguage">

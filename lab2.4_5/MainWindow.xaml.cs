@@ -46,13 +46,14 @@ namespace lab2._4_5
                 menuLang.IsChecked = lang.Equals(currLang);
                 menuLang.Click += ChangeLanguageClick;
                 menuLanguage.Items.Add(menuLang);
-            }            
-
+            }           
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             NewDocument(sender, e);
+            SelectDarkTheme(sender, e);
         }
 
         private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
