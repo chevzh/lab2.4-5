@@ -13,8 +13,13 @@
         <CommandBinding Command="New" Executed="NewDocument" />
         <CommandBinding Command="Save" Executed="SaveDocument"/>
         <CommandBinding Command="Open" Executed="OpenDocument"/>
+        <CommandBinding Command="SaveAs" Executed="SaveAsDocument"/>
     </Window.CommandBindings>
-    
+
+    <Window.InputBindings>
+        <KeyBinding Command="SaveAs" Gesture="Ctrl +Shift+ S"  />
+    </Window.InputBindings>
+
     <Grid x:Name="layoutGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -28,6 +33,7 @@
                 <MenuItem Header="New" x:Name="New" Command="New"/>
                 <MenuItem Header="Open" x:Name="Open" Command="Open"/>
                 <MenuItem Header="Save" x:Name="Save" Command="Save" />
+                <MenuItem Header="Save As..." x:Name="SaveAs" Command="SaveAs" InputGestureText="Ctrl+Shift+S" />
                                
             </MenuItem>
             <MenuItem Header="Edit">
@@ -35,6 +41,19 @@
                 <MenuItem Header="Paste" x:Name="Paste" Command="Paste"/>
                 <MenuItem Header="Cut" x:Name="Cut" Command="Cut"/>
             </MenuItem>
+
+            <MenuItem Header="View">
+                <MenuItem Header="Theme" x:Name="Theme" >
+                    <MenuItem Header="Dark" x:Name="Dark"/>
+                    <MenuItem Header="Light" x:Name="Light"/>
+                </MenuItem>
+
+                <MenuItem Header="Language" x:Name="Language" >
+                    <MenuItem Header="Russian" x:Name="Russian"/>
+                    <MenuItem Header="English" x:Name="English"/>
+                </MenuItem>
+            </MenuItem>
+
         </Menu>
         
         <ToolBar  Height="40" Margin="10,0,10,0" VerticalAlignment="Top" Grid.Row="1">

@@ -21,19 +21,20 @@ namespace lab2._4_5
     public partial class DocumentTabItem : TabItem
     {
         string headerText;
+        string path;
         public int wordsCount;
         public string HeaderText { get => headerText; set => headerText = value; }
-       
+        public string Path { get => path; set => path = value; }
+
         public DocumentTabItem()
         {
-            InitializeComponent();         
-            
+            InitializeComponent();        
         }      
 
         public DocumentTabItem(string header)
         {
             InitializeComponent();
-            HeaderText = header;        
+            HeaderText = header;          
         }
 
         public void CloseButton_OnClick(object sender, RoutedEventArgs e)
@@ -97,9 +98,12 @@ namespace lab2._4_5
                 string text = new TextRange(RtbContent.Document.ContentStart, RtbContent.Document.ContentEnd).Text;
                 wordsCount = text.Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
                 WordCounterTextBlock.Text = "Количество слов: " + wordsCount;
-            }
-         
+            }      
+
+
         }
+
+        
 
     }
 }

@@ -22,7 +22,7 @@ namespace lab2._4_5
     /// </summary>
     public partial class MainWindow : Window
     {
-       
+        public List<string> paths = new List<string>();  
         public Dictionary<string, FontFamily> tabItemFontFamilies = new Dictionary<string, FontFamily>();
         public Dictionary<string, double> tabItemFontSizes = new Dictionary<string, double>();
         public string newItem;
@@ -64,6 +64,33 @@ namespace lab2._4_5
 
         private void SaveDocument(object sender, RoutedEventArgs e)
         {
+            if (paths.Contains(((DocumentTabItem)(tabControl.SelectedItem)).Path))
+            {
+                RichTextBox docBox = (((RichTextBox)((DocumentTabItem)(tabControl.SelectedItem)).RtbContent));
+                TextRange doc = new TextRange(docBox.Document.ContentStart, docBox.Document.ContentEnd);
+
+                string path = ((DocumentTabItem)(tabControl.SelectedItem)).Path;
+
+                using (FileStream fs = System.IO.File.Create(path))
+                {
+                    if (System.IO.Path.GetExtension(path).ToLower() == ".rtf")
+                        doc.Save(fs, DataFormats.Rtf);
+                    else if (System.IO.Path.GetExtension(path).ToLower() == ".txt")
+                        doc.Save(fs, DataFormats.Text);
+                   
+                }
+            }
+            else
+            {
+                SaveAsDocument(sender, e);
+            }
+
+           
+        }
+
+
+        private void SaveAsDocument(object sender, RoutedEventArgs e)
+        {
             RichTextBox docBox = (((RichTextBox)((DocumentTabItem)(tabControl.SelectedItem)).RtbContent));
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Text files(*.txt)|*.txt|Rich Text File(*.rtf)|*.rtf|All files(*.*)|*.*";
@@ -76,21 +103,27 @@ namespace lab2._4_5
                 TextRange doc = new TextRange(docBox.Document.ContentStart, docBox.Document.ContentEnd);
                 using (FileStream fs = System.IO.File.Create(saveDialog.FileName))
                 {
-                   if (System.IO.Path.GetExtension(saveDialog.FileName).ToLower() == ".txt")
+                    if (System.IO.Path.GetExtension(saveDialog.FileName).ToLower() == ".txt")
                         doc.Save(fs, DataFormats.Text);
                     else if (System.IO.Path.GetExtension(saveDialog.FileName).ToLower() == ".rtf")
                         doc.Save(fs, DataFormats.Rtf);
-
+                    
                 }
+
+                paths.Add(saveDialog.FileName);
+                ((DocumentTabItem)tabControl.SelectedItem).Path = saveDialog.FileName;
+                ((DocumentTabItem)tabControl.SelectedItem).HeaderText = saveDialog.SafeFileName; //WTF?????
+
             }
 
-           
-        }      
+             
+        }
 
         private void OpenDocument(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
             openFile.Filter = "Text files(*.txt)|*.txt|Rich Text File(*.rtf)|*.rtf|All files(*.*)|*.*";
+            openFile.DefaultExt = ".txt";
             if (openFile.ShowDialog() == true)
             {
                 NewDocument(sender, e);
@@ -109,8 +142,13 @@ namespace lab2._4_5
                     document.Blocks.Add(paragraph);
                     ((RichTextBox)(((DocumentTabItem)(tabControl.Items[tabControl.SelectedIndex])).RtbContent)).Document = document;
 
-                    tabItemFontFamilies.Add(openFile.SafeFileName, new FontFamily("Times New Roman"));
-                    tabItemFontSizes.Add(openFile.SafeFileName, 14);
+                    //ломалось, когда открытый файл открывался повторно
+                    if (!tabItemFontFamilies.ContainsKey(openFile.SafeFileName))
+                    {
+                        tabItemFontFamilies.Add(openFile.SafeFileName, new FontFamily("Times New Roman"));
+                        tabItemFontSizes.Add(openFile.SafeFileName, 14);
+                    }
+                    
 
                     //Костыль на \n
                     ((DocumentTabItem)tabControl.SelectedItem).WordCounterTextBlock.Text = $"Количество слов: {((DocumentTabItem)tabControl.SelectedItem).wordsCount - 1}";
@@ -141,7 +179,9 @@ namespace lab2._4_5
 
                 }
 
-                 ((DocumentTabItem)tabControl.SelectedItem).HeaderText = openFile.SafeFileName;
+                paths.Add(openFile.FileName);
+                ((DocumentTabItem)tabControl.SelectedItem).Path = openFile.FileName;
+                ((DocumentTabItem)tabControl.SelectedItem).HeaderText = openFile.SafeFileName;
 
             }
         }
