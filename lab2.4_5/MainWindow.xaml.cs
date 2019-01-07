@@ -46,7 +46,7 @@ namespace lab2._4_5
                 menuLang.IsChecked = lang.Equals(currLang);
                 menuLang.Click += ChangeLanguageClick;
                 menuLanguage.Items.Add(menuLang);
-            }
+            }            
 
         }
 
@@ -231,6 +231,33 @@ namespace lab2._4_5
             }
         }
       
+        void SelectDarkTheme(object sender, RoutedEventArgs e)
+        {            
+            DarkMenuItem.IsChecked = true;
+            LightMenuItem.IsChecked = false;
+            ThemeChange("dark_theme");
 
+        }
+
+        void SelectLightTheme(object sender, RoutedEventArgs e)
+        {
+            DarkMenuItem.IsChecked = false;
+            LightMenuItem.IsChecked = true;
+            ThemeChange("light_theme");
+        }
+
+
+        private void ThemeChange(string s)
+        {
+            string style = s;
+            // определяем путь к файлу ресурсов
+            var uri = new Uri("/Resources/" + style + ".xaml", UriKind.Relative);
+            // загружаем словарь ресурсов
+            ResourceDictionary resourceDict = Application.LoadComponent(uri) as ResourceDictionary;
+            // очищаем коллекцию ресурсов приложения
+            Application.Current.Resources.Clear();
+            // добавляем загруженный словарь ресурсов
+            Application.Current.Resources.MergedDictionaries.Add(resourceDict);
+        }
     }
 }
