@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lab2._4_5"
         mc:Ignorable="d"
-        Title="Text Reactor" Height="450" Width="820"
+        Title="{DynamicResource m_Title}" Height="450" Width="820"
         Icon="Sources\icon-reactor.png"
         Background= "#303C74" Loaded="Window_Loaded"
         >
@@ -28,56 +28,64 @@
         </Grid.RowDefinitions>
 
         <Menu Margin="10,10,10,0" VerticalAlignment="Top"  Background="#7A84AE" >
-            <MenuItem Header="File" x:Name="File" >
-                
-                <MenuItem Header="New" x:Name="New" Command="New"/>
-                <MenuItem Header="Open" x:Name="Open" Command="Open"/>
-                <MenuItem Header="Save" x:Name="Save" Command="Save" />
-                <MenuItem Header="Save As..." x:Name="SaveAs" Command="SaveAs" InputGestureText="Ctrl+Shift+S" />
-                               
+            <MenuItem Header="{DynamicResource m_menu_File}" x:Name="File" >                
+                <MenuItem Header="{DynamicResource m_menu_New}" x:Name="New" Command="New"/>
+                <MenuItem Header="{DynamicResource m_menu_Open}" x:Name="Open" Command="Open"/>
+                <MenuItem Header="{DynamicResource m_menu_Save}" x:Name="Save" Command="Save" />
+                <MenuItem Header="{DynamicResource m_menu_SaveAs}" x:Name="SaveAs" Command="SaveAs" InputGestureText="Ctrl+Shift+S" />                               
             </MenuItem>
-            <MenuItem Header="Edit">
-                <MenuItem Header="Copy" x:Name="Copy" Command="Copy"/>
-                <MenuItem Header="Paste" x:Name="Paste" Command="Paste"/>
-                <MenuItem Header="Cut" x:Name="Cut" Command="Cut"/>
+            
+            <MenuItem Header="{DynamicResource m_menu_Edit}">
+                <MenuItem Header="{DynamicResource m_menu_Copy}" x:Name="Copy" Command="Copy"/>
+                <MenuItem Header="{DynamicResource m_menu_Paste}" x:Name="Paste" Command="Paste"/>
+                <MenuItem Header="{DynamicResource m_menu_Cut}" x:Name="Cut" Command="Cut"/>
+                <MenuItem Header="{DynamicResource m_menu_Undo}" x:Name="Undo" Command="Undo"/>
+                <MenuItem Header="{DynamicResource m_menu_Redo}" x:Name="Redo" Command="Redo"/>
             </MenuItem>
 
-            <MenuItem Header="View">
-                <MenuItem Header="Theme" x:Name="Theme" >
-                    <MenuItem Header="Dark" x:Name="Dark"/>
-                    <MenuItem Header="Light" x:Name="Light"/>
+            <MenuItem Header="{DynamicResource m_menu_View}">
+                <MenuItem Header="{DynamicResource m_menu_Theme}" x:Name="Theme" >
+                    <MenuItem Header="{DynamicResource m_menu_Dark}" x:Name="Dark"/>
+                    <MenuItem Header="{DynamicResource m_menu_Light}" x:Name="Light"/>
                 </MenuItem>
 
-                <MenuItem Header="Language" x:Name="Language" >
-                    <MenuItem Header="Russian" x:Name="Russian"/>
-                    <MenuItem Header="English" x:Name="English"/>
+                <MenuItem Header="{DynamicResource m_menu_Language}"  x:Name="menuLanguage">
+                    <MenuItem Header="{DynamicResource m_menu_English}" x:Name="English"/>
+                    <MenuItem Header="{DynamicResource m_menu_Russian}" x:Name="Russian"/>
                 </MenuItem>
             </MenuItem>
 
         </Menu>
         
         <ToolBar  Height="40" Margin="10,0,10,0" VerticalAlignment="Top" Grid.Row="1">
-            <Button Margin="0,0,2,0" Command="New" ToolTip="New">
+            <Button Margin="0,0,2,0" Command="New" ToolTip="{DynamicResource m_menu_New}">
                 <Image Source="Sources\icon-new.png"></Image>
             </Button>
-            <Button Margin="0,0,2,0" Command="Open" ToolTip="Open">
+            <Button Margin="0,0,2,0" Command="Open" ToolTip="{DynamicResource m_menu_Open}">
                 <Image Source="Sources\icon-open.png"></Image>
             </Button>
-            <Button Margin="0,0,2,0" Command="Save" ToolTip="Save">
+            <Button Margin="0,0,2,0" Command="Save" ToolTip="{DynamicResource m_menu_Save}">
                 <Image Source="Sources\icon-save.png"></Image>
             </Button>
             
-                <Separator Margin="5,0,5,0">
-                  
+                <Separator Margin="5,0,5,0">                  
                 </Separator>
-           
-            <ToggleButton x:Name="boldToggleBUtton" Content="B"  FontWeight="Bold" FontSize="25" Command="ToggleBold" ToolTip="Bold"></ToggleButton>
-            <ToggleButton x:Name="italicToggleBUtton" Content="I"  FontStyle="Italic" FontSize="25" Command="ToggleItalic" ToolTip="Italic"></ToggleButton>
-            <ToggleButton x:Name="underlineToggleBUtton" Command="ToggleUnderline"><TextBlock TextDecorations="Underline" FontSize="25" ToolTip="Underline">U</TextBlock>
+
+            <Button ToolTip="{DynamicResource m_menu_Undo}" Command="Undo">
+                <Image Source="Sources/icon_undo.png" Height="20"/>
+            </Button>
+            <Button ToolTip="{DynamicResource m_menu_Redo}" Command="Redo">
+                <Image Source="Sources/icon_redo.png" Height="20" />
+            </Button>
+
+            <ToggleButton x:Name="boldToggleBUtton" Content="B"  FontWeight="Bold" FontSize="25" Command="ToggleBold" ToolTip="{DynamicResource m_tooltip_Bold}"/>
+            <ToggleButton x:Name="italicToggleBUtton" Content="I"  FontStyle="Italic" FontSize="25" Command="ToggleItalic" ToolTip="{DynamicResource m_tooltip_Italic}"></ToggleButton>
+            <ToggleButton x:Name="underlineToggleBUtton" Command="ToggleUnderline" ToolTip="{DynamicResource m_tooltip_Underline}">
+                <TextBlock TextDecorations="Underline" FontSize="25" >U</TextBlock>
             </ToggleButton>
 
-            <ComboBox x:Name="fontFamilyComboBox" Width="100" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" SelectionChanged="FontFamilyComboBox_SelectionChanged"/>
-            <ComboBox x:Name="fontSizeComboBox" Width="50"  SelectionChanged="FontSizeComboBox_SelectionChanged"></ComboBox>
+            <ComboBox x:Name="fontFamilyComboBox" Width="100" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" SelectionChanged="FontFamilyComboBox_SelectionChanged" ToolTip="{DynamicResource m_tooltip_FontFamily}"/>
+            <ComboBox x:Name="fontSizeComboBox" Width="50"  SelectionChanged="FontSizeComboBox_SelectionChanged" ToolTip="{DynamicResource m_tooltip_FontSize}"></ComboBox>
 
         </ToolBar>
 

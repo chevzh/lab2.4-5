@@ -97,7 +97,7 @@ namespace lab2._4_5
             {
                 string text = new TextRange(RtbContent.Document.ContentStart, RtbContent.Document.ContentEnd).Text;
                 wordsCount = text.Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
-                WordCounterTextBlock.Text = "Количество слов: " + wordsCount;
+                WordCounterTextBlock.Text = $"Количество слов: {wordsCount}" ;
             }      
 
 

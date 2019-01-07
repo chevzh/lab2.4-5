@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,22 @@ namespace lab2._4_5
         {
             InitializeComponent();
             fontSizeComboBox.ItemsSource = new List<double>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 36, 48, 72 };
-           
+
+            App.LanguageChanged += LanguageChanged;
+            CultureInfo currLang = App.Language;
+
+            //Заполняем меню смены языка:
+            menuLanguage.Items.Clear();
+            foreach (var lang in App.Languages)
+            {
+                MenuItem menuLang = new MenuItem();
+                menuLang.Header = lang.DisplayName;
+                menuLang.Tag = lang;
+                menuLang.IsChecked = lang.Equals(currLang);
+                menuLang.Click += ChangeLanguageClick;
+                menuLanguage.Items.Add(menuLang);
+            }
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -60,7 +76,33 @@ namespace lab2._4_5
             tabControl.SelectedItem = item;
            
         }
-      
+
+
+        private void LanguageChanged(Object sender, EventArgs e)
+        {
+            CultureInfo currLang = App.Language;
+
+            //Отмечаем нужный пункт смены языка как выбранный язык
+            foreach (MenuItem i in menuLanguage.Items)
+            {
+                CultureInfo ci = i.Tag as CultureInfo;
+                i.IsChecked = ci != null && ci.Equals(currLang);
+            }
+        }
+
+        private void ChangeLanguageClick(Object sender, EventArgs e)
+        {
+            MenuItem mi = sender as MenuItem;
+            if (mi != null)
+            {
+                CultureInfo lang = mi.Tag as CultureInfo;
+                if (lang != null)
+                {
+                    App.Language = lang;
+                }
+            }
+
+        }
 
         private void SaveDocument(object sender, RoutedEventArgs e)
         {
@@ -91,6 +133,7 @@ namespace lab2._4_5
 
         private void SaveAsDocument(object sender, RoutedEventArgs e)
         {
+            
             RichTextBox docBox = (((RichTextBox)((DocumentTabItem)(tabControl.SelectedItem)).RtbContent));
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Text files(*.txt)|*.txt|Rich Text File(*.rtf)|*.rtf|All files(*.*)|*.*";
@@ -171,11 +214,13 @@ namespace lab2._4_5
                     }
 
 
-                                    
 
-                    //Продолжение костыля
-                    tabItemFontFamilies.Add(openFile.SafeFileName, (FontFamily)documentTextRange.GetPropertyValue(FontFamilyProperty));
-                    tabItemFontSizes.Add(openFile.SafeFileName, (double)documentTextRange.GetPropertyValue(FontSizeProperty));
+                    if (!tabItemFontFamilies.ContainsKey(openFile.SafeFileName))
+                    {
+                        //Продолжение костыля
+                        tabItemFontFamilies.Add(openFile.SafeFileName, (FontFamily)documentTextRange.GetPropertyValue(FontFamilyProperty));
+                        tabItemFontSizes.Add(openFile.SafeFileName, (double)documentTextRange.GetPropertyValue(FontSizeProperty));
+                    }
 
                 }
 
