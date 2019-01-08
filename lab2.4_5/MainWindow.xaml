@@ -21,8 +21,8 @@
 
     <Window.InputBindings>
         <KeyBinding Command="SaveAs" Gesture="Ctrl +Shift+ S"  />
-        <KeyBinding Command="local:WindowCommands.SelectDarkThemeCommand" Gesture="Ctrl +Shift+ D"/>
-        <KeyBinding Command="local:WindowCommands.SelectLightThemeCommand" Gesture="Ctrl +Shift+ I"/>
+        <KeyBinding Command="local:WindowCommands.SelectDarkThemeCommand" Gesture="Ctrl + D"/>
+        <KeyBinding Command="local:WindowCommands.SelectLightThemeCommand" Gesture="Ctrl + L"/>
     </Window.InputBindings>
 
     <Grid x:Name="layoutGrid">
@@ -50,8 +50,8 @@
 
             <MenuItem Header="{DynamicResource m_menu_View}">
                 <MenuItem Header="{DynamicResource m_menu_Theme}" x:Name="Theme" >
-                    <MenuItem Header="{DynamicResource m_menu_Dark}" x:Name="DarkMenuItem" Command="local:WindowCommands.SelectDarkThemeCommand" IsCheckable="True" InputGestureText="Ctrl+Shift+D"/>
-                    <MenuItem Header="{DynamicResource m_menu_Light}" x:Name="LightMenuItem" Command ="local:WindowCommands.SelectLightThemeCommand" IsCheckable="True" InputGestureText="Ctrl+Shift+I"/>
+                    <MenuItem Header="{DynamicResource m_menu_Dark}" x:Name="DarkMenuItem" Command="local:WindowCommands.SelectDarkThemeCommand" IsCheckable="True" InputGestureText="Ctrl+D"/>
+                    <MenuItem Header="{DynamicResource m_menu_Light}" x:Name="LightMenuItem" Command ="local:WindowCommands.SelectLightThemeCommand" IsCheckable="True" InputGestureText="Ctrl+L"/>
                 </MenuItem>
 
                 <MenuItem Header="{DynamicResource m_menu_Language}"  x:Name="menuLanguage">
