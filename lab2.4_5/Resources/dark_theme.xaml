@@ -20,15 +20,59 @@
     </Style>
 
     <Style x:Key="ToolBarStyle" TargetType="ToolBar">
-        <Setter Property="Background" Value="#7A84AE" />
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="BorderBrush" Value="White" />
+        <Style.Setters>
+            <Setter Property="Background" Value="#7A84AE" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="White" />
+        </Style.Setters>   
+        
     </Style>
 
     <Style x:Key="MenuStyle" TargetType="Menu">
         <Setter Property="Background" Value="#7A84AE" />
       
     </Style>
-    
+
+
+    <Style TargetType="MenuItem">
+        <Style.Triggers>
+
+            <Trigger Property="IsMouseOver" Value="True">
+                 <Setter Property="Foreground" Value="Red" />
+            </Trigger>
+
+            <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" Duration="0:0:1" To="15" AutoReverse="True" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="IsPressed" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Green" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType= "Button" x:Key="BoldStyle"> 
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=boldToggleButton, Path=IsChecked}"
+                        Value="True">
+            <Setter Property="IsEnabled" Value="False"/>
+        </DataTrigger>
+
+        </Style.Triggers>
+    </Style>
+
 
 </ResourceDictionary>
